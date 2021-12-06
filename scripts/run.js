@@ -10,22 +10,24 @@ const main = async () => {
 	// Esperar hasta que esté desplegado
 	await waveContract.deployed();
 
-	console.log("Contrato desplegado a:", waveContract.address);
+	console.log("Contrato desplegado en:", waveContract.address);
 	console.log("Contrato desplegado por:", owner.address);
 
 	// Obtener la cuenta de total de saludos
 	let waveCount = await waveContract.getTotalWaves();
+	waveCount = await waveContract.getTotalWaves();
 
 	// Enviar un saludo y obtener la cuenta nuevamente
-	let waveTxn = await waveContract.wave();
+	let waveTxn = await waveContract.wave("Un mensaje");
 	await waveTxn.wait();
-	waveCount = await waveContract.getTotalWaves();
 
 	// Lo mismo pero desde otra address
 	// https://docs.ethers.io/v5/api/contract/contract/#Contract-connect
-	waveTxn = await waveContract.connect(randomAddress).wave();
+	waveTxn = await waveContract.connect(randomAddress).wave("Otro mensaje");
 	await waveTxn.wait();
-	waveCount = await waveContract.getTotalWaves();
+
+	let allWaves = await waveContract.getAllWaves();
+	console.log(allWaves);
 };
 
 main()
